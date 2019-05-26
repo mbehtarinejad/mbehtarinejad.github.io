@@ -94,7 +94,6 @@
     </div>
 
     <div class="w3-bar w3-center" style="margin-bottom:10px;">
-        <button class="w3-button w3-red" onclick="remove()" style="float:left;margin-left:2px;">Remove Selected Items</button>
         <button class="w3-button w3-black" onclick="showall()">Show All</button>
         <button class="w3-button w3-blue" onclick="showactive()">Show Active</button>
         <button class="w3-button w3-sand" onclick="showinactive()">Show InActive</button>
@@ -104,8 +103,7 @@
 
         <thead>
             <tr class="w3-brown">
-                <th style="width:5%;"></th>
-                <th style="width:35%;">Title</th>
+                <th style="width:40%;">Title</th>
                 <th style="width:35%;">Description</th>
                 <th style="width:15%;">Due Date</th>
                 <th style="width:10%;">Status</th>
@@ -167,7 +165,6 @@
                     checked = "checked";
                 }
                 var r = `<tr class="tr">
-            <td><input class="w3-check" type="checkbox" /></td>
             <td id="title${i}">${b[0]}</td>
             <td id="description${i}">${b[1]}</td>
             <td id="date${i}">${b[2]}</td>
@@ -196,7 +193,6 @@
                 if (b[3] == "on") {
                     checked = "checked";
                     var r = `<tr class="tr">
-            <td><input class="w3-check" type="checkbox" /></td>
             <td id="title${i}">${b[0]}</td>
             <td id="description${i}">${b[1]}</td>
             <td id="date${i}">${b[2]}</td>
@@ -225,7 +221,6 @@
                 b = a.split(",");
                 if (b[3] == "off") {
                     var r = `<tr class="tr">
-            <td><input class="w3-check" type="checkbox" /></td>
             <td id="title${i}">${b[0]}</td>
             <td id="description${i}">${b[1]}</td>
             <td id="date${i}">${b[2]}</td>
@@ -243,9 +238,7 @@
             }
         }
 
-        function remove() {
 
-        }
 
         $(document).ready(function () {
 
@@ -261,7 +254,6 @@
                     checked = "checked";
                 }
                 var r = `<tr class="tr">
-            <td><input class="w3-check" type="checkbox" /></td>
             <td id="title${i}">${b[0]}</td>
             <td id="description${i}">${b[1]}</td>
             <td id="date${i}">${b[2]}</td>
