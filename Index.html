@@ -1,0 +1,283 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>TODO App</title>
+    <link href="Script/w3.css" rel="stylesheet" />
+    <script src="Script/jquery-1.10.2.min.js"></script>
+    <style>
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+            /* Hide default HTML checkbox */
+            .switch input {
+                opacity: 0;
+                width: 0;
+                height: 0;
+            }
+
+        /* The slider */
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+            .slider:before {
+                position: absolute;
+                content: "";
+                height: 26px;
+                width: 26px;
+                left: 4px;
+                bottom: 4px;
+                background-color: white;
+                -webkit-transition: .4s;
+                transition: .4s;
+            }
+
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked + .slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+
+        /* Rounded sliders */
+        .slider.round {
+            border-radius: 34px;
+        }
+
+            .slider.round:before {
+                border-radius: 50%;
+            }
+    </style>
+</head>
+<body>
+    <div class="w3-card-4">
+        <div class="w3-container w3-green" style="text-align:center;margin-bottom:10px;">
+            <h4>Insert a Task</h4>
+        </div>
+        <div class="w3-row-padding">
+            <div class="w3-third">
+                <label>Tiltle:</label>
+                <input class="w3-input w3-border" id="title" type="text" placeholder="Enter Title Here...">
+            </div>
+            <div class="w3-third">
+                <label>Description:</label>
+                <input class="w3-input w3-border" id="description" type="text" placeholder="Enter Description Here...">
+            </div>
+            <div class="w3-third">
+                <label>Due Date:</label>
+                <input class="w3-input w3-border" id="date" type="date">
+            </div>
+        </div>
+        <p style="padding-bottom:5px; margin-left:16px;">
+            <button type="button" onclick="submit()" class="w3-btn w3-green">Submit</button>
+        </p>
+
+    </div>
+
+    <div class="w3-bar w3-center" style="margin-bottom:10px;">
+        <button class="w3-button w3-red" onclick="remove()" style="float:left;margin-left:2px;">Remove Selected Items</button>
+        <button class="w3-button w3-black" onclick="showall()">Show All</button>
+        <button class="w3-button w3-blue" onclick="showactive()">Show Active</button>
+        <button class="w3-button w3-sand" onclick="showinactive()">Show InActive</button>
+    </div>
+
+    <table id="table" class="w3-table-all">
+
+        <thead>
+            <tr class="w3-brown">
+                <th style="width:5%;"></th>
+                <th style="width:35%;">Title</th>
+                <th style="width:35%;">Description</th>
+                <th style="width:15%;">Due Date</th>
+                <th style="width:10%;">Status</th>
+            </tr>
+        </thead>
+    </table>
+
+    <script>
+
+        function submit() {
+            var array = [];
+            var title = $("#title").val();
+            var description = $("#description").val();
+            var date = $("#date").val();
+            var status = "on"
+            Array.prototype.push.apply(array, [title, description, date, status]);
+            var row = JSON.stringify(array);
+            localStorage.setItem('row' + localStorage.length, row);
+
+            showall();
+            $("#title, #description, #date").val("");
+        }
+
+        function abc(id) {
+            if ($("#" + id).is(":checked")) {
+                var array = [];
+                var title = $("#title" + id).text();
+                var description = $("#description" + id).text();
+                var date = $("#date" + id).text();
+                var status = "on"
+                Array.prototype.push.apply(array, [title, description, date, status]);
+                var row = JSON.stringify(array);
+                localStorage.setItem('row' + id, row);
+
+            }
+            else {
+                var array = [];
+                var title = $("#title" + id).text();
+                var description = $("#description" + id).text();
+                var date = $("#date" + id).text();
+                var status = "off"
+                Array.prototype.push.apply(array, [title, description, date, status]);
+                var row = JSON.stringify(array);
+                localStorage.setItem('row' + id, row);
+            }
+        }
+
+        function showall() {
+            $(".tr").remove();
+            for (var i = 0; i < localStorage.length; i++) {
+
+                var getitems = localStorage.getItem("row" + i);
+                var parseditems = JSON.parse(getitems);
+                var a = "" + parseditems;
+                var b = [];
+                b = a.split(",");
+                var checked = "";
+                if (b[3] == "on") {
+                    checked = "checked";
+                }
+                var r = `<tr class="tr">
+            <td><input class="w3-check" type="checkbox" /></td>
+            <td id="title${i}">${b[0]}</td>
+            <td id="description${i}">${b[1]}</td>
+            <td id="date${i}">${b[2]}</td>
+            <td>
+                <label class="switch">
+                    <input type="checkbox" id="${i}" onchange="abc(${i})" ${checked}>
+                    <span class="slider round"></span>
+                </label>
+            </td>
+        </tr>`
+                ;
+                $("#table").prepend(r)
+            }
+        }
+
+        function showactive() {
+            $(".tr").remove();
+            for (var i = 0; i < localStorage.length; i++) {
+
+                var getitems = localStorage.getItem("row" + i);
+                var parseditems = JSON.parse(getitems);
+                var a = "" + parseditems;
+                var b = [];
+                b = a.split(",");
+                var checked = "";
+                if (b[3] == "on") {
+                    checked = "checked";
+                    var r = `<tr class="tr">
+            <td><input class="w3-check" type="checkbox" /></td>
+            <td id="title${i}">${b[0]}</td>
+            <td id="description${i}">${b[1]}</td>
+            <td id="date${i}">${b[2]}</td>
+            <td>
+                <label class="switch">
+                    <input type="checkbox" id="${i}" onchange="abc(${i})" ${checked}>
+                    <span class="slider round"></span>
+                </label>
+            </td>
+        </tr>`
+                    ;
+                    $("#table").prepend(r);
+                }
+
+            }
+        }
+
+        function showinactive() {
+            $(".tr").remove();
+            for (var i = 0; i < localStorage.length; i++) {
+
+                var getitems = localStorage.getItem("row" + i);
+                var parseditems = JSON.parse(getitems);
+                var a = "" + parseditems;
+                var b = [];
+                b = a.split(",");
+                if (b[3] == "off") {
+                    var r = `<tr class="tr">
+            <td><input class="w3-check" type="checkbox" /></td>
+            <td id="title${i}">${b[0]}</td>
+            <td id="description${i}">${b[1]}</td>
+            <td id="date${i}">${b[2]}</td>
+            <td>
+                <label class="switch">
+                    <input type="checkbox" id="${i}" onchange="abc(${i})">
+                    <span class="slider round"></span>
+                </label>
+            </td>
+        </tr>`
+                    ;
+                    $("#table").prepend(r);
+                }
+
+            }
+        }
+
+        function remove() {
+
+        }
+
+        $(document).ready(function () {
+
+            for (var i = 0; i < localStorage.length; i++) {
+
+                var getitems = localStorage.getItem("row" + i);
+                var parseditems = JSON.parse(getitems);
+                var a = "" + parseditems;
+                var b = [];
+                b = a.split(",");
+                var checked = "";
+                if (b[3] == "on") {
+                    checked = "checked";
+                }
+                var r = `<tr class="tr">
+            <td><input class="w3-check" type="checkbox" /></td>
+            <td id="title${i}">${b[0]}</td>
+            <td id="description${i}">${b[1]}</td>
+            <td id="date${i}">${b[2]}</td>
+            <td>
+                <label class="switch">
+                    <input type="checkbox" id="${i}" onchange="abc(${i})" ${checked}>
+                    <span class="slider round"></span>
+                </label>
+            </td>
+        </tr>`
+                ;
+                $("#table").prepend(r)
+            }
+        });
+
+    </script>
+
+</body>
+</html>
